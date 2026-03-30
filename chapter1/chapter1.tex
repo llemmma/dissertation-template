@@ -1,0 +1,96 @@
+% !TEX root = ./article/chapter1-article.tex
+
+This chapter lays the formal groundwork for the rest of the
+dissertation.  We fix notation and recall the key definitions and
+results from modal logic that will be needed in later chapters.
+
+\section{Propositional Modal Logic}
+
+We work in a propositional modal language $\langp$ built from a
+countable set of propositional variables $\mathsf{Prop} = \{p, q,
+r, \ldots\}$, the Boolean connectives, and a unary modal operator
+$\nec$ (necessity).  The dual $\poss$ (possibility) is defined as
+$\poss A \coloneqq \neg\nec\neg A$.
+
+\begin{definition}\label{def:kripke-frame}
+  A \textit{Kripke frame} is a pair $\FR = \langle W, R \rangle$
+  where $W$ is a non-empty set of worlds and $R \subseteq W \times
+  W$ is an accessibility relation.
+\end{definition}
+
+\begin{definition}\label{def:kripke-model}
+  A \textit{Kripke model} $\MRel = \langle W, R, V \rangle$
+  consists of a Kripke frame $\FR$ together with a valuation
+  $V : \mathsf{Prop} \to \wp(W)$.
+\end{definition}
+
+Truth at a world $w$ in a model $\MRel$ is defined recursively.
+The key clause for the modal operator is:
+\[
+  \MRel, w \models \nec A \iff \text{for all } v \in W, \text{ if }
+  wRv \text{ then } \MRel, v \models A.
+\]
+We write $\truthset{A}^\MRel = \{w \in W : \MRel, w \models A\}$
+for the \textit{truth set} of $A$ in $\MRel$.
+
+
+\section{Normal Modal Logics}
+
+The smallest normal modal logic, $\K$, is axiomatized over
+classical propositional logic by:
+\begin{hilbertlist}
+  \item[\kax] $\nec(A \to B) \to (\nec A \to \nec B)$
+  \item[\nrule] From $A$, infer $\nec A$.
+\end{hilbertlist}
+
+Extensions of $\K$ are obtained by adding axioms:
+\begin{hilbertlist}
+  \item[\dax] $\nec A \to \poss A$
+  \item[\uax] $\nec A \to A$
+\end{hilbertlist}
+These yield familiar logics: $\D = \K + \dax$, $\T = \K + \uax$,
+and so on through $\Sfour$ and $\Sfive$.
+
+\begin{theorem}\label{thm:K-complete}
+  $\K$ is sound and complete with respect to the class of all Kripke
+  frames.
+\end{theorem}
+
+\begin{proof}
+  Soundness is routine.  For completeness, construct the canonical
+  model $\Mlog = \langle \Wlog, R^\circ, \Vlog \rangle$ where
+  $\Wlog$ is the set of all maximal $\K$-consistent sets, and
+  $\Gamma R^\circ \Delta$ iff $\{A : \nec A \in \Gamma\} \subseteq
+  \Delta$.  The Lindenbaum--Tarski construction guarantees that
+  every consistent formula is satisfiable in $\Mlog$.
+\end{proof}
+
+
+\section{Neighborhood Semantics}
+
+Neighborhood semantics generalize relational semantics by replacing
+the accessibility relation with a neighborhood function
+\cite{scott1970, pacuit2017}.
+
+\begin{definition}\label{def:nbhd-frame}
+  A \textit{neighborhood frame} is a pair $\FN = \langle W, \fn
+  \rangle$ where $W$ is a non-empty set and $\fn : W \to
+  \wp(\wp(W))$ assigns to each world a collection of
+  neighborhoods.
+\end{definition}
+
+\begin{definition}\label{def:nbhd-model}
+  A \textit{neighborhood model} $\MN = \langle W, \fn, V \rangle$
+  consists of a neighborhood frame together with a valuation.
+\end{definition}
+
+The truth clause for the modal operator becomes:
+\[
+  \MN, w \models \nec A \iff \truthset{A}^{\MN} \in \fn(w).
+\]
+
+\begin{remark}\label{rem:non-normal}
+  Neighborhood semantics can model \textit{non-normal} logics that
+  lack the $\kax$ axiom or the necessitation rule.  This makes them
+  suitable for deontic and other weaker-than-normal modal logics.
+\end{remark}

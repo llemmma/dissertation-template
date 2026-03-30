@@ -1,0 +1,100 @@
+% !TEX root = ./article/chapter3-article.tex
+
+This chapter establishes the main completeness results for the
+logics developed in Chapters~\ref{ch:chapter1}
+and~\ref{ch:chapter2}.  The central technique is the construction
+of canonical neighborhood models.
+
+\section{Canonical Models}
+
+\begin{convention}\label{conv:L}
+  Throughout this chapter, $L$ denotes a logic extending the minimal
+  congruential (classical) modal logic $\E$, in the sense of
+  Chellas~\cite{chellas1980}.
+\end{convention}
+
+\begin{definition}\label{def:canonical-model}
+  The \textit{canonical neighborhood model} for $L$ is $\Mlog =
+  \langle \Wlog, \flog, \Vlog \rangle$ where:
+  \begin{romanlist}
+    \item $\Wlog$ is the set of all maximal $L$-consistent sets of
+    formulas;
+    \item $\Vlog(p) = \{\Gamma \in \Wlog : p \in \Gamma\}$ for each
+    $p \in \mathsf{Prop}$;
+    \item $\flog(\Gamma) = \{\proofset{A} : \ought A \in \Gamma\}$,
+    where $\proofset{A} = \{\Delta \in \Wlog : A \in \Delta\}$ is
+    the \textit{proof set} of $A$.
+  \end{romanlist}
+\end{definition}
+
+\begin{observation}\label{obs:truth-proof}
+  In the canonical model, truth sets and proof sets coincide:
+  $\truthset{A}^{\Mlog} = \proofset{A}$ for every formula $A$.
+  This is established by induction on formula complexity.
+\end{observation}
+
+
+\section{The Truth Lemma and Completeness}
+
+\begin{theorem}[Truth Lemma]\label{thm:truth-lemma}
+  For every formula $A$ and every $\Gamma \in \Wlog$:
+  \[
+    \Mlog, \Gamma \models A \iff A \in \Gamma.
+  \]
+\end{theorem}
+
+\begin{proof}
+  By induction on the complexity of $A$.  The base case and Boolean
+  cases are standard.  For the modal case $A = \ought B$:
+  \begin{description}
+    \item[$(\Rightarrow)$] If $\Mlog, \Gamma \models \ought B$,
+    then $\truthset{B}^{\Mlog} \in \flog(\Gamma)$.  By
+    Observation~\ref{obs:truth-proof}, $\proofset{B} \in
+    \flog(\Gamma)$, so by definition of $\flog$, $\ought B \in
+    \Gamma$.
+    \item[$(\Leftarrow)$] If $\ought B \in \Gamma$, then
+    $\proofset{B} \in \flog(\Gamma)$.  By the induction hypothesis,
+    $\truthset{B}^{\Mlog} = \proofset{B}$, so
+    $\truthset{B}^{\Mlog} \in \flog(\Gamma)$, i.e., $\Mlog,
+    \Gamma \models \ought B$.  \qedhere
+  \end{description}
+\end{proof}
+
+\begin{corollary}\label{cor:completeness}
+  Every logic $L \supseteq \E$ is complete with respect to its
+  canonical neighborhood model: if $A$ is valid in all neighborhood
+  models for $L$, then $A \in L$.
+\end{corollary}
+
+\begin{proof}
+  Suppose $A \notin L$.  Then $\{\neg A\}$ is $L$-consistent, so by
+  Lindenbaum's Lemma it extends to some $\Gamma \in \Wlog$ with
+  $\neg A \in \Gamma$.  By the Truth Lemma, $\Mlog, \Gamma \models
+  \neg A$, so $A$ is not valid in $\Mlog$.
+\end{proof}
+
+
+\section{Monotonicity and Canonicity}
+
+Not every frame condition is preserved in canonical models.
+
+\begin{lemma}\label{lem:supplementation-canonical}
+  If $L$ contains the rule \textup{RM}, then the canonical
+  neighborhood function $\flog$ is supplemented.
+\end{lemma}
+
+\begin{proof}
+  Suppose $\proofset{A} \in \flog(\Gamma)$ and $\proofset{A}
+  \subseteq \proofset{B}$.  The inclusion means $A \to B$ belongs to
+  every maximal $L$-consistent set, so $\vdash_L A \to B$.  By RM,
+  $\vdash_L \ought A \to \ought B$.  Since $\ought A \in \Gamma$
+  and $\Gamma$ is maximal, $\ought B \in \Gamma$, hence
+  $\proofset{B} \in \flog(\Gamma)$.
+\end{proof}
+
+\begin{remark}\label{rem:beyond-supplementation}
+  The converse direction --- showing that logics \textit{without} RM
+  yield non-supplemented canonical models --- requires care.  The
+  canonical model may accidentally satisfy frame conditions not
+  derivable in $L$.  See \cite{chellas1980} for discussion.
+\end{remark}

@@ -1,0 +1,32 @@
+\documentclass[letterpaper,12pt]{article}
+\usepackage[top=1in,bottom=1in,left=1in,right=1in]{geometry}
+\usepackage{french-logic}
+
+\addbibresource{../../refs.bib}
+\AtEveryBibitem{%
+  \clearfield{doi}%
+  \ifentrytype{online}
+    {}
+    {\clearfield{url}}%
+  \clearfield{language}%
+  \clearfield{isbn}%
+}
+
+\title{First Chapter Title}
+\author{Your Name}
+
+\begin{document}
+
+\maketitle
+
+\tableofcontents
+
+\clearpage
+
+\doublespacing
+
+\section{Introduction}
+\input{../chapter1.tex}
+
+\printbibliography[heading=bibintoc]
+\end{document}
