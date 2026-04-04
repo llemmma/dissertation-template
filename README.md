@@ -7,7 +7,11 @@ Adapted and extended by Brandon Hopkins (Philosophy, UC Davis) from an earlier t
 
 ## Getting Started
 
-The template requires a TeX distribution with `pdflatex` and `biber` (e.g., TeX Live, MacTeX, MiKTeX).
+This template is built for local compilation and requires a TeX distribution with `pdflatex` and `biber` (e.g., TeX Live, MacTeX, MiKTeX).
+
+### Overleaf
+
+The template has been tested on Overleaf. Standalone article compilations in the chapter `article/` subdirectories work, provided `french-logic.sty` is placed in the project root directory. The full dissertation does not currently compile on Overleaf; the problem may simply be that the free Overleaf plan times out before the triple-pass build completes, even though the compilation is otherwise correct. Further work would be needed to get top-level compilation working on Overleaf.
 
 As shipped, the template uses the [`french-logic`](https://github.com/bphopkins/configs/blob/main/latex/french-logic/french-logic.sty) package, which bundles the structural packages the template needs (`biblatex` with biber, `hyperref`, `setspace`) together with theorem environments, notation macros, and other content-level features used by the example chapters.  You can keep this dependency or replace it --- see the two paths below.
 
@@ -240,6 +244,6 @@ The earliest ancestor of this template was the UC Davis dissertation template ma
 - **Page styles:** `fancyhdr`-based custom styles → `memoir` built-in styles
 - **Frontmatter spacing:** `\bigskip` throughout → precise `\vspace` values; hardcoded year → `\the\year`
 
-The Galois Group template was designed for Overleaf compatibility. This template has not been tested on Overleaf and is intended for local compilation; Overleaf support may be revisited in the future.
+The Galois Group template was designed for Overleaf compatibility; see [Overleaf](#overleaf) for the current status of this template on Overleaf.
 
 
