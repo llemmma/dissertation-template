@@ -1,8 +1,8 @@
-# UC Davis Dissertation Template
+# UC Davis Philosophy Dissertation Template
 
-A LaTeX dissertation template for UC Davis PhD students, built on the `memoir` document class with a dual-compilation architecture: each chapter compiles both as part of the full dissertation and as a standalone article.
+A LaTeX dissertation template for UC Davis philosophy PhD students, built on the `memoir` document class with a dual-compilation architecture: each chapter compiles both as part of the full dissertation and as a standalone article.
 
-Developed by Brandon Hopkins (Philosophy, UC Davis).
+Adapted and extended by Brandon Hopkins (Philosophy, UC Davis) from an earlier template by the Galois Group (see [Acknowledgements](#acknowledgements)).
 
 
 ## Getting Started
@@ -229,6 +229,17 @@ The default article wrapper includes a table of contents and wraps chapter conte
 ```
 
 
-## License
+## Acknowledgements
 
-[Choose a license for your dissertation and template.]
+The earliest ancestor of this template was the UC Davis dissertation template maintained by [The Galois Group](https://galois.math.ucdavis.edu/doku.php?id=thesistips), the mathematics graduate student organization at UC Davis, originally created by Tyrell McAllister with updates by Jeff Irion, John Challenor, Will Wright, David Haley, and Greg DePaul. What survives from that template is the frontmatter layout: the title page text and committee signature block, the copyright page, and the optional dedication page. Everything else has been replaced:
+
+- **Document class:** `amsbook` → `memoir`
+- **Project structure:** flat directory → chapter subdirectories with a dual-compilation model (each chapter compiles both as part of the dissertation and as a standalone article)
+- **Package architecture:** inline preamble → external `french-logic` package
+- **Bibliography:** BibTeX with SIAM style → biblatex with biber backend
+- **Page styles:** `fancyhdr`-based custom styles → `memoir` built-in styles
+- **Frontmatter spacing:** `\bigskip` throughout → precise `\vspace` values; hardcoded year → `\the\year`
+
+The Galois Group template was designed for Overleaf compatibility. This template has not been tested on Overleaf and is intended for local compilation; Overleaf support may be revisited in the future.
+
+

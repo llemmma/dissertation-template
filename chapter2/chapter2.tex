@@ -1,111 +1,72 @@
 % !TEX root = ./article/chapter2-article.tex
 
-This chapter develops the main technical apparatus of the
-dissertation.  Building on the neighborhood semantics introduced in
-Chapter~\ref{ch:chapter1}, we specialize the framework to deontic
-logic and extend it to conditional operators.
+This chapter develops the main technical apparatus.  Building on
+the Kripke semantics of Chapter~\ref{ch:chapter1}, we discuss
+frame conditions and introduce neighborhood semantics.
 
-\section{Deontic Neighborhood Frames}
+\section{Frame Conditions}
 
-We now interpret the modal operator as obligation.  In place of the
-generic $\nec$, we write $\ought$ for ``it ought to be that'' and
-$\may$ for ``it is permissible that,'' where $\may A \coloneqq
-\neg\ought\neg A$.
+Properties of the accessibility relation correspond to axiom
+schemas.
 
-\begin{definition}\label{def:deontic-nbhd-frame}
-  A \textit{deontic neighborhood frame} is a neighborhood frame
-  $\FN = \langle W, \fn \rangle$ where $\fn(w)$ is interpreted as
-  the collection of obligation-neighborhoods at $w$.
-\end{definition}
-
-Frame conditions on $\fn$ correspond to axioms of the logic:
-
-\begin{proposition}\label{prop:D-condition}
-  A neighborhood frame validates $\dax$ (i.e., $\ought A \to \may
-  A$) if and only if $\fn$ satisfies:
-  \[
-    \text{for all } w \in W,\ \text{if } X \in \fn(w) \text{ then }
-    W \setminus X \notin \fn(w).
-  \]
+\begin{proposition}\label{prop:reflexivity}
+  A frame $\FR$ validates $\tax$ ($\nec A \to A$) if and only if
+  $R$ is reflexive.
 \end{proposition}
 
 \begin{proof}
-  $(\Rightarrow)$\quad Suppose the frame validates $\dax$ and $X
-  \in \fn(w)$.  Let $V(p) = X$.  Then $w \models \ought p$, so by
-  $\dax$, $w \models \may p$, i.e., $w \not\models \ought \neg p$.
-  Hence $\truthset{\neg p} = W \setminus X \notin \fn(w)$.
+  (LTR)\quad Fix $w \in W$ and set $V(p) = \set{v :
+  wRv}$.  Let $\mwrv$.  Then $\M,w\trues \nec p$, so $\tax$ gives $\M,w\trues
+  p$, hence $w \in V(p)$, i.e., $wRw$.
 
-  $(\Leftarrow)$\quad Assume the frame condition holds and $w
-  \models \ought A$.  Then $\truthset{A} \in \fn(w)$, so $W
-  \setminus \truthset{A} = \truthset{\neg A} \notin \fn(w)$, giving
-  $w \not\models \ought \neg A$, i.e., $w \models \may A$.
+  (RTL)\quad If $R$ is reflexive and $\M,w\trues \nec A$,
+  then $wRw$ gives $\M,w\trues A$.
 \end{proof}
 
+\begin{note}\label{note:correspondences}
+  Transitivity corresponds to $\nec A \to \nec\nec A$ and
+  symmetry to $A \to \nec\poss A$.  See
+  \textcite[ch.~3]{blackburn2001}.
+\end{note}
 
-\section{Monotonicity and Congruentiality}
+\section{Neighborhood Semantics}
 
-A key structural distinction is between \textit{monotone} and
-merely \textit{congruential} logics.
+Neighborhood semantics generalize relational semantics by
+replacing $R$ with a set-selection function
+\cite{scott1970, pacuit2017}.
 
-\begin{definition}\label{def:monotone}
-  A neighborhood function $\fn$ is \textit{supplemented}
-  (monotone) if for all $w \in W$:
+\begin{definition}\label{def:nbhd-model}
+  A \textit{neighborhood model} $\MN = \oset{W, \fn, V}$ has $\fn : W \to \power{\power{W}}$ assigning each world
+  a collection of neighborhoods.  The modal clause is:
   \[
-    X \in \fn(w) \text{ and } X \subseteq Y \implies Y \in \fn(w).
+    \MN,w\trues \nec A \text{ if and only if }
+    \truthset{A}^{\MN} \in \fn(w).
   \]
 \end{definition}
 
-\begin{note}\label{note:supplementation}
-  Supplementation corresponds to the monotonicity rule (RM): from
-  $\vdash A \to B$ infer $\vdash \ought A \to \ought B$.  Logics
-  that validate the congruence rule \rerule\ --- from $\vdash A \iff
-  B$ infer $\vdash \ought A \iff \ought B$ --- without validating RM
-  are called \textit{congruential} or \textit{classical}.
-\end{note}
+\begin{remark}\label{rem:generalization}
+  Every Kripke frame induces a neighborhood frame via $\fn(w) =
+  \set{X \subseteq W : \set{v : wRv} \subseteq X}$.  The converse
+  fails: neighborhood frames can model non-normal logics lacking
+  $\kax$ or $\nrule$ \parencite{chellas1980}.
+\end{remark}
 
-\begin{lemma}\label{lem:supplementation}
-  Every neighborhood function $\fn$ has a unique smallest monotone
-  extension $\fn^+$, defined by
-  \[
-    \fn^+(w) = \{Y \subseteq W : X \subseteq Y \text{ for some }
-    X \in \fn(w)\}.
-  \]
+\section{Supplementation}
+
+\begin{definition}\label{def:supplemented}
+  $\fn$ is \textit{supplemented} if $X \in \fn(w)$ and
+  $X \subseteq Y$ imply $Y \in \fn(w)$ for all $w$.
+\end{definition}
+
+\begin{lemma}\label{lem:supp-closure}
+  Every $\fn$ has a unique smallest supplemented extension
+  $\fn^+$ given by $\fn^+(w) = \set{Y : X \subseteq Y \text{ for
+  some } X \in \fn(w)}$.
 \end{lemma}
 
 \begin{proof}
-  Clearly $\fn(w) \subseteq \fn^+(w)$.  To see that $\fn^+$ is
-  supplemented, suppose $Y \in \fn^+(w)$ and $Y \subseteq Z$.  Then
-  there exists $X \in \fn(w)$ with $X \subseteq Y \subseteq Z$, so
-  $Z \in \fn^+(w)$.  Minimality follows by construction.
+  $\fn(w) \subseteq \fn^+(w)$ is immediate.  If $Y \in
+  \fn^+(w)$ and $Y \subseteq Z$, the witnessing $X$ gives
+  $X \subseteq Z$, so $Z \in \fn^+(w)$.  Any supplemented
+  extension must contain each such $Y$, giving minimality.
 \end{proof}
-
-
-\section{Conditional Operators}
-
-For dyadic deontic logics, we move to a conditional obligation
-operator $\cobs$, read ``given $A$, it ought to be that $B$.''
-
-\begin{definition}\label{def:dyadic-nbhd-frame}
-  A \textit{dyadic neighborhood frame} is a structure $\langle W,
-  \fd, V \rangle$ where $\fd : W \times \wp(W) \to \wp(\wp(W))$ is
-  a selection function mapping a world and a proposition to a
-  collection of neighborhoods.
-\end{definition}
-
-The truth clause for conditional obligation is:
-\[
-  \MN, w \models \cobs(A, B) \iff \truthset{B} \in \fd(w,
-  \truthset{A}).
-\]
-
-\begin{theorem}\label{thm:cond-correspondence}
-  A dyadic neighborhood frame validates $\cobs(A, B \land C) \to
-  \cobs(A, B)$ if and only if $\fd$ is monotone in the consequent.
-\end{theorem}
-
-\begin{proofsketch}
-  The proof follows the same pattern as
-  Proposition~\ref{prop:D-condition}: the left-to-right direction
-  extracts the frame condition via a suitable valuation, and the
-  right-to-left direction verifies the axiom directly.
-\end{proofsketch}

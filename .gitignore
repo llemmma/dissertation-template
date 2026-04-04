@@ -1,13 +1,5 @@
-# AUCTeX preview cache
-**/.prv/
-*_region_.prv/
-*.prv/
-
-# AUCTeX region compilation artifacts
-_region_.*
-
-# AUCTeX auto-parsed style files
-auto/
+# Claude Code
+CLAUDE.md
 
 # LaTeX style files
 *.sty
@@ -22,14 +14,12 @@ auto/
 *.toc
 *.bbl
 *.blg
+*.bcf
+*.run.xml
 *.fdb_latexmk
 *.fls
 *.synctex.gz
 *.synctex(busy)
-*.bcf
-*.run.xml
-*.bcf-SAVE-ERROR
-*.bbl-SAVE-ERROR
 *.nav
 *.snm
 *.vrb
@@ -38,3 +28,4 @@ auto/
 *.backup
 *~
 \#*\#
+
