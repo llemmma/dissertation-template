@@ -13,14 +13,15 @@ This template is built for local compilation and requires a TeX distribution wit
 
 The template has been tested on Overleaf. Standalone article compilations in the chapter `article/` subdirectories work, provided `french-logic.sty` is placed in the project root directory. The full dissertation does not currently compile on Overleaf; the problem may simply be that the free Overleaf plan times out before the triple-pass build completes, even though the compilation is otherwise correct. Further work would be needed to get top-level compilation working on Overleaf.
 
-As shipped, the template uses the [`french-logic`](https://github.com/bphopkins/configs/blob/main/latex/french-logic/french-logic.sty) package, which bundles the structural packages the template needs (`biblatex` with biber, `hyperref`, `setspace`) together with theorem environments, notation macros, and other content-level features used by the example chapters.  You can keep this dependency or replace it --- see the two paths below.
+This template depends on the [`french-logic`](https://github.com/bphopkins/configs/blob/main/latex/french-logic/french-logic.sty) package, which is **not included in this repository** and must be downloaded separately from the link above.  It bundles the structural packages the template needs (`biblatex` with biber, `hyperref`, `setspace`) together with theorem environments, notation macros, and other content-level features used by the example chapters.  You can keep this dependency or replace it --- see the two paths below.
 
 ### With `french-logic` (default)
 
 The `.gitignore` excludes `.sty` files, so `french-logic.sty` must be made available separately:
 
-- **Symlink** into the project directory: `ln -s /path/to/french-logic.sty .`
+- **Copy** into the project root: place `french-logic.sty` directly in the project directory.  This works for the full dissertation build.  For standalone article builds, which compile from `chapter/article/` subdirectories two levels down, TeX will not find the file in the project root automatically; you would need to either set `TEXINPUTS=../../:` before the `pdflatex` command or change `\usepackage{french-logic}` to `\usepackage{../../french-logic}` in each article wrapper.
 - **Install** in your local texmf tree: copy to `~/texmf/tex/latex/french-logic/french-logic.sty` and run `texhash ~/texmf`
+- **Symlink** into the project directory: `ln -s /path/to/french-logic.sty .`
 
 Either way, changes to the `.sty` file take effect on the next compilation with no reinstall needed.
 
