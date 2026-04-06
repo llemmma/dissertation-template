@@ -144,7 +144,7 @@ Each chapter file begins with a magic comment:
 % !TEX root = ./article/chapter1-article.tex
 ```
 
-This tells your editor (TeXShop, VS Code LaTeX Workshop, Emacs AUCTeX, etc.) to compile the standalone article version when you build from within the chapter file.  Frontmatter files point to `../dissertation.tex` instead.
+This tells your editor (TeXstudio, TeXShop, VS Code LaTeX Workshop, Emacs AUCTeX, etc.) to compile the standalone article version when you build from within the chapter file.  Frontmatter files point to `../dissertation.tex` instead.
 
 ### Section Levels
 
