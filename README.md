@@ -4,10 +4,46 @@ A LaTeX dissertation template for UC Davis philosophy PhD students, built on the
 
 Adapted and extended by Brandon Hopkins (Philosophy, UC Davis) from an earlier template by the Galois Group (see [Acknowledgements](#acknowledgements)).
 
+> **Note:** This repository and its documentation are works in progress. If you have questions or concerns, please contact the maintainer, Brandon Hopkins.
+
+
+## Contents
+
+- [Getting Started](#getting-started)
+  - [Creating your own repository](#creating-your-own-repository)
+  - [Overleaf](#overleaf)
+  - [With `french-logic` (default)](#with-french-logic-default)
+  - [Without `french-logic`](#without-french-logic)
+- [Project Structure](#project-structure)
+- [Architecture](#architecture)
+  - [Dual-Compilation Model](#dual-compilation-model)
+  - [TEX Root Directives](#tex-root-directives)
+  - [Section Levels](#section-levels)
+  - [Bibliography](#bibliography)
+  - [Memoir Features](#memoir-features)
+- [Build Commands](#build-commands)
+  - [Why three passes?](#why-three-passes)
+- [Customization](#customization)
+  - [Changing title, author, department, and committee](#changing-title-author-department-and-committee)
+  - [Adding a new chapter](#adding-a-new-chapter)
+  - [Removing a chapter](#removing-a-chapter)
+  - [Removing the dedication or copyright page](#removing-the-dedication-or-copyright-page)
+  - [Adding appendices](#adding-appendices)
+  - [Changing the article wrapper pattern](#changing-the-article-wrapper-pattern)
+- [Acknowledgements](#acknowledgements)
+
 
 ## Getting Started
 
 This template is built for local compilation and requires a TeX distribution with `pdflatex` and `biber` (e.g., TeX Live, MacTeX, MiKTeX).
+
+### Creating your own repository
+
+To turn this template into your own dissertation repo:
+
+- **Use this template** (recommended): Click the green "Use this template" button on the GitHub repository page.  This creates a fresh repository under your own account with the same files but no shared history.
+- **Clone and change the remote**: If you're comfortable with git, you can clone this repo and then update the remote URL to point at your own empty repository.
+- **Download the zip**: On the GitHub page, click Code → Download ZIP.  This gives you the files without any git history; run `git init` in the extracted directory to start fresh.
 
 ### Overleaf
 
@@ -19,9 +55,14 @@ This template depends on the [`french-logic`](https://github.com/bphopkins/confi
 
 The `.gitignore` excludes `.sty` files, so `french-logic.sty` must be made available separately:
 
+- **Install** in your local texmf tree: copy to `~/texmf/tex/latex/french-logic/french-logic.sty` and run `texhash ~/texmf`.  If the directory doesn't exist, create it first:
+  
+  ```bash
+  mkdir -p ~/texmf/tex/latex/french-logic
+  ```
+  This is the recommended option because TeX will find the package automatically from any directory, so both the full dissertation and standalone article builds work without any extra configuration.
 - **Copy** into the project root: place `french-logic.sty` directly in the project directory.  This works for the full dissertation build.  For standalone article builds, which compile from `chapter/article/` subdirectories two levels down, TeX will not find the file in the project root automatically; you would need to either set `TEXINPUTS=../../:` before the `pdflatex` command or change `\usepackage{french-logic}` to `\usepackage{../../french-logic}` in each article wrapper.
-- **Install** in your local texmf tree: copy to `~/texmf/tex/latex/french-logic/french-logic.sty` and run `texhash ~/texmf`
-- **Symlink** into the project directory: `ln -s /path/to/french-logic.sty .`
+- **Symlink** into the project directory: `ln -s /path/to/french-logic.sty .`  This is a more advanced option; if you don't know how or why you would use a symlink, one of the options above is a better fit.
 
 Either way, changes to the `.sty` file take effect on the next compilation with no reinstall needed.
 
@@ -61,6 +102,7 @@ Everything else --- the `memoir` class setup, the `\input` structure, the biblio
 dissertation-template/
 ├── dissertation.tex              Main driver file
 ├── refs.bib                      Master bibliography (biber backend)
+├── french-logic.sty              Optional (see above)
 ├── .gitignore
 ├── README.md
 │
