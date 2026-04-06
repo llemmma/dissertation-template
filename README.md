@@ -23,6 +23,7 @@ Adapted and extended by Brandon Hopkins (Philosophy, UC Davis) from an earlier t
   - [Memoir Features](#memoir-features)
 - [Build Commands](#build-commands)
   - [Why three passes?](#why-three-passes)
+  - [Building everything at once (Makefile)](#building-everything-at-once-makefile)
 - [Customization](#customization)
   - [Changing title, author, department, and committee](#changing-title-author-department-and-committee)
   - [Adding a new chapter](#adding-a-new-chapter)
@@ -205,6 +206,23 @@ pdflatex chapter1-article.tex && biber chapter1-article && pdflatex chapter1-art
 2. `biber`: reads `.bcf`, processes `refs.bib`, outputs `.bbl`.
 3. Second `pdflatex`: incorporates the `.bbl`, resolves most references.
 4. Third `pdflatex`: resolves any remaining forward references and page numbers.
+
+
+### Building everything at once (Makefile)
+
+The repository includes a `Makefile` that builds all chapter articles and the full dissertation in one command.  LaTeX editors and compilers completely ignore this file --- it only runs when you explicitly type `make` in a terminal, so it will never interfere with the normal workflow.
+
+```bash
+make              # Build all chapter articles and the dissertation
+make articles     # Build all chapter articles only
+make dissertation # Build the full dissertation only
+make chapter1     # Build just chapter 1's article
+make clean        # Remove build artifacts
+```
+
+**Platform support:** `make` is available out of the box on Linux and macOS (via Xcode Command Line Tools).  On Windows it is not installed by default; the easiest route is to use WSL (Windows Subsystem for Linux), which provides `make` along with a full Linux environment.
+
+**If you add or remove chapters**, update the `CHAPTERS` list at the top of the `Makefile`.  If you'd rather not maintain this file, you can safely delete it --- nothing in the LaTeX build chain depends on it.
 
 
 ## Customization
