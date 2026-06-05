@@ -1,0 +1,61 @@
+% chapter3-beamer.tex — a standalone slide deck for Chapter 3.
+% See chapter1/beamer/chapter1-beamer.tex for the full explanation of the
+% `slim` option and the adapt-don't-\input approach.  Build with
+% `make chapter3-beamer`.
+%
+% Chapter 3's prose is mostly placeholder, so this deck is a skeleton: a title,
+% an overview, one result frame, and a discussion frame.  Replace the contents
+% with your actual results — the notation macros are already available.
+
+\documentclass{beamer}
+
+\usetheme{Madrid}
+\setbeamertemplate{navigation symbols}{}
+\setbeamertemplate{theorems}[numbered]
+
+\usepackage[slim]{philogic}
+
+\usepackage[backend=biber]{biblatex}
+\addbibresource{../../refs.bib}
+
+\title{Main Results}
+\subtitle{Chapter 3}
+\author{Your Name}
+\institute{Your Department \\ University of California, Davis}
+\date{}
+
+\begin{document}
+
+\frame{\titlepage}
+
+\begin{frame}{Overview}
+  \begin{itemize}
+    \item A first result, building on the framework of Chapters 1--2.
+    \item A second result, extending the analysis.
+    \item Discussion and consequences.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{First result}
+  Building on the relational models \MRel{} of Chapter~1 and the neighbourhood
+  models \MN{} of Chapter~2, we show that\dots
+  \begin{theorem}
+    \emph{(State your central result here.)}  For every formula $A$,
+    $\proves A$ if and only if $\models A$.
+  \end{theorem}
+\end{frame}
+
+\begin{frame}{Discussion}
+  \begin{itemize}
+    \item What the result buys us, and how it bears on \K, \KT, and \Sfour.
+    \item Connections to neighbourhood semantics for non-normal logics
+      \parencite{pacuit2017}.
+    \item Open questions, taken up in the conclusion.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks]{References}
+  \printbibliography
+\end{frame}
+
+\end{document}

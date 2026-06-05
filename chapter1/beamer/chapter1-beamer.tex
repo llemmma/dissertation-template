@@ -1,0 +1,84 @@
+% chapter1-beamer.tex — a standalone slide deck for Chapter 1.
+%
+% This demonstrates philogic's `slim` option.  In slim mode philogic loads ONLY
+% the notation (so \nec, \trues, \truthset, \FR, ... are all available), while
+% beamer keeps control of theorem blocks, hyperref, and page structure.  The
+% same macros you use in the chapter therefore render identically on slides.
+%
+% Slides are necessarily an *adaptation* of the chapter, not the same source
+% \input twice: prose and \section headings do not map onto frames.  Treat this
+% as a worked example of turning a chapter into a talk.
+%
+% Build from this directory (the Makefile target `make chapter1-beamer` does so,
+% and sets TEXINPUTS so the bundled philogic.sty in the project root is found).
+
+\documentclass{beamer}
+
+\usetheme{Madrid}
+\setbeamertemplate{navigation symbols}{}  % drop the navigation clutter
+\setbeamertemplate{theorems}[numbered]
+
+\usepackage[slim]{philogic}
+
+% In slim mode philogic does not load biblatex (a host class usually owns the
+% bibliography).  beamer doesn't, so we load it here and reuse the shared
+% refs.bib at the project root.
+\usepackage[backend=biber]{biblatex}
+\addbibresource{../../refs.bib}
+
+\title{Modal Preliminaries}
+\subtitle{Chapter 1}
+\author{Your Name}
+\institute{Your Department \\ University of California, Davis}
+\date{}
+
+\begin{document}
+
+\frame{\titlepage}
+
+\begin{frame}{The modal language}
+  We work in a modal language \langm{} with propositional variables
+  $\mathsf{Prop} = \set{p, q, r, \dots}$, the Boolean connectives, and a unary
+  necessity operator $\nec$.  Its dual is
+  \[
+    \poss A \coloneqq \neg\nec\neg A \qquad (\text{``possibly } A\text{''}).
+  \]
+\end{frame}
+
+\begin{frame}{Kripke semantics}
+  \begin{definition}[Frame]
+    A \emph{Kripke frame} is a pair $\FR = \oset{W, R}$ with $W \neq \emptyset$
+    and $R \subseteq W \times W$.
+  \end{definition}
+  \begin{definition}[Model]
+    A \emph{Kripke model} $\MRel = \oset{W, R, V}$ adds a valuation
+    $V : \mathsf{Prop} \to \power{W}$.  The modal clause:
+    \[
+      \MRel,w \trues \nec A
+      \quad\text{iff}\quad
+      \text{for all } v,\ wRv \text{ implies } \MRel,v \trues A.
+    \]
+  \end{definition}
+\end{frame}
+
+\begin{frame}{Normal modal logics}
+  The smallest normal modal logic \K{} extends classical propositional logic
+  with
+  \begin{itemize}
+    \item the axiom \kax: $\nec(A \to B) \to (\nec A \to \nec B)$;
+    \item the rule \nrule: from $\proves A$, infer $\proves \nec A$.
+  \end{itemize}
+  Familiar extensions include $\KT = \K \oplus \tax$ (with \tax{} the schema
+  $\nec A \to A$) and \Sfour.
+
+  \begin{theorem}[Completeness]
+    \K{} is sound and complete with respect to the class of all Kripke frames
+    \parencite[ch.~4]{blackburn2001}.
+  \end{theorem}
+\end{frame}
+
+\begin{frame}[allowframebreaks]{References}
+  \printbibliography
+\end{frame}
+
+\end{document}

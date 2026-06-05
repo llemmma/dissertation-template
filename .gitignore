@@ -2,7 +2,10 @@
 CLAUDE.md
 
 # LaTeX style files
+# philogic.sty is bundled with the template, so keep it tracked; ignore the rest
+# (e.g. a personal french-logic.sty dropped in for local builds).
 *.sty
+!philogic.sty
 *.def
 *.cls
 *.bst

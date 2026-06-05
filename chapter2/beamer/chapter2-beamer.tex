@@ -1,0 +1,66 @@
+% chapter2-beamer.tex — a standalone slide deck for Chapter 2.
+% See chapter1/beamer/chapter1-beamer.tex for the full explanation of the
+% `slim` option and the adapt-don't-\input approach.  Build with
+% `make chapter2-beamer`.
+
+\documentclass{beamer}
+
+\usetheme{Madrid}
+\setbeamertemplate{navigation symbols}{}
+\setbeamertemplate{theorems}[numbered]
+
+\usepackage[slim]{philogic}
+
+\usepackage[backend=biber]{biblatex}
+\addbibresource{../../refs.bib}
+
+% beamer predefines theorem, corollary, definition, example, and proof — but not
+% proposition.  In slim mode philogic doesn't add it either (the host class is
+% in charge of theorem environments), so define the one we need here:
+\newtheorem{proposition}{Proposition}
+
+\title{Frame Conditions \& Neighbourhood Semantics}
+\subtitle{Chapter 2}
+\author{Your Name}
+\institute{Your Department \\ University of California, Davis}
+\date{}
+
+\begin{document}
+
+\frame{\titlepage}
+
+\begin{frame}{Frame conditions}
+  Properties of the accessibility relation correspond to modal axioms.
+  \begin{proposition}
+    A frame \FR{} validates \tax{} ($\nec A \to A$) if and only if $R$ is
+    reflexive.
+  \end{proposition}
+  Likewise, transitivity corresponds to $\nec A \to \nec\nec A$ and symmetry to
+  $A \to \nec\poss A$ \parencite[ch.~3]{blackburn2001}.
+\end{frame}
+
+\begin{frame}{Neighbourhood semantics}
+  Generalise relational models by replacing $R$ with a neighbourhood function
+  \parencite{scott1970, pacuit2017}.
+  \begin{definition}
+    A \emph{neighbourhood model} $\MN = \oset{W, \fn, V}$ has
+    $\fn : W \to \power{\power{W}}$, assigning each world a collection of
+    neighbourhoods.  The modal clause:
+    \[
+      \MN,w \trues \nec A
+      \quad\text{iff}\quad
+      \truthset{A}^{\MN} \in \fn(w).
+    \]
+  \end{definition}
+  \begin{block}{Why bother?}
+    Every Kripke frame induces a neighbourhood frame, but not conversely:
+    neighbourhood frames model non-normal logics lacking \kax{} or \nrule{}
+    \parencite{chellas1980}.
+  \end{block}
+\end{frame}
+
+\begin{frame}[allowframebreaks]{References}
+  \printbibliography
+\end{frame}
+
+\end{document}

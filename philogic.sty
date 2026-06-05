@@ -1,0 +1,218 @@
+% philogic.sty — a minimal logic-macros package for the dissertation template.
+%
+% This is a deliberately small *core*, extracted from a much larger personal
+% package (`french-logic`).  It gives you (a) the math-typesetting packages and
+% (b) the notation a logic dissertation actually needs — with enough structure
+% and commentary that you can grow it into your own house style.  It is meant to
+% be read, edited, and pillaged, not treated as a black box.
+%
+% Two layers:
+%   * NOTATION  (always loaded): set theory, object languages, connectives,
+%     consequence/forcing relations, models & frames, named systems, axioms.
+%   * STRUCTURE (skipped under the `slim` option): biblatex, hyperref, custom
+%     lists, and the amsthm theorem environments — i.e. everything a host class
+%     such as beamer or a journal/conference style already provides, and would
+%     clash with if loaded twice.
+%
+% Usage:
+%   \usepackage{philogic}        % full: notation + structure (dissertation, articles)
+%   \usepackage[slim]{philogic}  % notation only (beamer decks, submissions)
+%
+% If you keep adapting this file across projects, consider moving your copy into
+% your local texmf tree so every document shares a single source of truth — see
+% the README's "Installing in your texmf tree" section.
+
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{philogic}[2026/06/05 v1.0 Minimal logic macros (dissertation template)]
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% OPTIONS %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% `slim` strips the document-structure packages so the file is safe to load
+% inside a class that already owns them: beamer (its own theorem blocks and
+% hyperref) or a conference/journal class (its own bibliography and theorems).
+% It exists to avoid "command already defined" and option-clash errors in
+% exactly those settings.  Everything in the NOTATION block below loads either
+% way, so the same macros are available on slides and in submissions.
+
+\newif\ifphilogicslim
+\DeclareOption{slim}{\philogicslimtrue}
+\DeclareOption*{\PackageWarning{philogic}{Unknown option `\CurrentOption'}}
+\ProcessOptions\relax
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% MATH TYPESETTING (always) %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\RequirePackage{amsmath}
+\RequirePackage{amssymb}
+\RequirePackage{mathtools}   % \coloneqq, \DeclarePairedDelimiter, amsmath fixes
+\RequirePackage{stmaryrd}    % \llbracket \rrbracket  (denotation brackets)
+\RequirePackage{mathrsfs}    % \mathscr  (script object-language letters)
+\RequirePackage{xspace}      % smart trailing space after letter-macros
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% DOCUMENT STRUCTURE (skipped under `slim`) %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\ifphilogicslim\else
+
+  % Bibliography: biblatex + biber (not BibTeX).  csquotes keeps quotation marks
+  % language-correct.  Load your .bib with \addbibresource in the document.
+  \RequirePackage[backend=biber]{biblatex}
+  \RequirePackage{csquotes}
+
+  % Clickable cross-references and a sensible PDF.  Load late so other packages
+  % can hook into it; if you later add cleveref, it must come *after* hyperref.
+  \RequirePackage{hyperref}
+
+  % Line spacing.  The standalone article wrappers call \doublespacing from
+  % here; the dissertation uses memoir's own \DoubleSpacing instead.
+  \RequirePackage{setspace}
+
+  % Custom list environments (enumitem).  Kept out of `slim` mode because beamer
+  % and many classes manage list spacing themselves.
+  \RequirePackage{enumitem}
+  \newenvironment{hilbertlist}% hanging labels for axioms/rules
+    {\begin{itemize}[topsep=8pt,noitemsep,labelsep=1.5em,leftmargin=2cm,rightmargin=1.25cm]}
+    {\end{itemize}}
+  \newenvironment{romanlist}% (i), (ii), (iii), ...
+    {\begin{enumerate}[label=(\roman*),topsep=8pt,noitemsep,leftmargin=1.25cm]}
+    {\end{enumerate}}
+  \newenvironment{arablist}% 1., 2., 3., ...
+    {\begin{enumerate}[label=\arabic*.,topsep=8pt,noitemsep,leftmargin=1.25cm]}
+    {\end{enumerate}}
+
+  % Theorem environments (amsthm).  beamer and most journal/conference classes
+  % define their own, which is why this whole block is skipped under `slim`.
+  \RequirePackage{amsthm}
+
+  % The default amsthm styles (plain / definition / remark) are used below: they
+  % are the conventional, widely-expected look.  To give theorems small-caps
+  % heads with an upright body instead, uncomment this style and select it before
+  % the relevant \newtheorem lines:
+  %
+  %   \newtheoremstyle{philplain}{6pt}{6pt}{\normalfont}{0pt}{\scshape}{.}{.5em}{}
+  %   \theoremstyle{philplain}
+  %
+  % All environments share one counter (the optional [theorem] argument) and are
+  % numbered within the section: Theorem 1.1, Lemma 1.2, Definition 1.3, ...
+  \theoremstyle{plain}
+    \newtheorem{theorem}{Theorem}[section]
+    \newtheorem{lemma}[theorem]{Lemma}
+    \newtheorem{proposition}[theorem]{Proposition}
+    \newtheorem{corollary}[theorem]{Corollary}
+  \theoremstyle{definition}
+    \newtheorem{definition}[theorem]{Definition}
+    \newtheorem{example}[theorem]{Example}
+  \theoremstyle{remark}
+    \newtheorem{remark}[theorem]{Remark}
+    \newtheorem{note}[theorem]{Note}
+
+\fi
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% NOTATION (always) %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% --- Set theory & tuples ---------------------------------------------------
+% \ensuremath lets these work in text or math, so you can drop \set{...}, or a
+% model \M, into a sentence without remembering to wrap it in $...$.
+\newcommand{\set}[1]{\ensuremath{\{#1\}}}               % \set{a,b}    -> {a, b}
+\newcommand{\oset}[1]{\ensuremath{\langle #1 \rangle}}  % \oset{W,R,V} -> <W, R, V>
+\newcommand{\tuple}[1]{\ensuremath{\langle #1 \rangle}} % synonym for \oset
+\newcommand{\power}[1]{\ensuremath{\wp(#1)}}            % \power{W}    -> P(W)
+\renewcommand{\emptyset}{\varnothing}                   % the rounder empty-set glyph
+
+% --- Object languages ------------------------------------------------------
+% A script L, optionally superscripted for the propositional / modal / deontic
+% fragment.  \xspace adds a space when followed by a word but not by punctuation.
+\newcommand{\lang}{\ensuremath{\mathscr{L}}\xspace}
+\newcommand{\langp}{\ensuremath{\mathscr{L}^{\textnormal{\tiny P}}}\xspace}
+\newcommand{\langm}{\ensuremath{\mathscr{L}^{\textnormal{\tiny M}}}\xspace}
+\newcommand{\langd}{\ensuremath{\mathscr{L}^{\textnormal{\tiny D}}}\xspace}
+
+% --- Connectives -----------------------------------------------------------
+\newcommand{\nec}{\Box}       % necessity / "it is obligatory that" / ...
+\newcommand{\poss}{\Diamond}  % possibility (the dual of \nec)
+% The Boolean connectives are left as standard LaTeX: \land \lor \neg \to
+% \leftrightarrow.  Rename them here only if you have a strong house preference.
+
+% --- Consequence & forcing relations ---------------------------------------
+% The semantic markup the whole subject turns on.  \models is renewed to the
+% double turnstile most logicians expect.
+\newcommand{\proves}{\vdash}     % syntactic consequence   (Gamma |- A)
+\newcommand{\nproves}{\nvdash}
+\renewcommand{\models}{\vDash}   % semantic consequence    (Gamma |= A)
+\newcommand{\nmodels}{\nvDash}
+\newcommand{\trues}{\Vdash}      % forcing at a point/world (M,w ||- A)
+\newcommand{\ntrues}{\nVdash}
+\newcommand{\truthset}[1]{\ensuremath{\llbracket #1\rrbracket}} % denotation / truth set [[A]]
+
+% --- Models, frames & their parts ------------------------------------------
+\newcommand{\M}{\ensuremath{\mathfrak{M}}} % a model
+\newcommand{\F}{\ensuremath{\mathfrak{F}}} % a frame
+\newcommand{\R}{\ensuremath{\mathcal{R}}}  % a relation, when you want a fancier R
+% Subscripted frames/models for relational (R) and neighbourhood (N) semantics.
+% The inner braces keep them atomic, so a trailing decoration (e.g. \fn^+)
+% groups correctly as (f_N)^+ rather than stacking + and N on the f.
+\newcommand{\FR}{\ensuremath{{\mathfrak{F}_{\!\scriptscriptstyle R}}}}
+\newcommand{\FN}{\ensuremath{{\mathfrak{F}_{\!\scriptscriptstyle N}}}}
+\newcommand{\MRel}{\ensuremath{{\mathfrak{M}_{\!\scriptscriptstyle R}}}}
+\newcommand{\MN}{\ensuremath{{\mathfrak{M}_{\!\scriptscriptstyle N}}}}
+\newcommand{\fn}{\ensuremath{{f_{\!\scriptscriptstyle N}}}}  % a neighbourhood function
+% Common "let M = <...>" shorthands:
+\newcommand{\mwrv}{\ensuremath{\mathfrak{M}=\langle W,R,V\rangle}}
+\newcommand{\mwnv}{\ensuremath{\mathfrak{M}=\langle W,N,V\rangle}}
+% Canonical-model decorations (superscripted with the logic L):
+\newcommand{\Mlog}{\ensuremath{\mathfrak{M}^{\scriptscriptstyle\mathcal{L}}}}
+\newcommand{\Wlog}{\ensuremath{W^{\scriptscriptstyle\mathcal{L}}}}
+\newcommand{\Rlog}{\ensuremath{R^{\scriptscriptstyle\mathcal{L}}}}
+\newcommand{\Vlog}{\ensuremath{V^{\scriptscriptstyle\mathcal{L}}}}
+
+% --- Named systems ---------------------------------------------------------
+% Upright bold names with smart spacing.  Normal modal logics:
+\newcommand{\K}{\ensuremath{\textup{\textbf{K}}}\xspace}
+\newcommand{\D}{\ensuremath{\textup{\textbf{D}}}\xspace}
+\newcommand{\T}{\ensuremath{\textup{\textbf{T}}}\xspace}
+\newcommand{\B}{\ensuremath{\textup{\textbf{B}}}\xspace}
+\newcommand{\four}{\ensuremath{\textup{\textbf{4}}}\xspace}
+\newcommand{\five}{\ensuremath{\textup{\textbf{5}}}\xspace}
+\newcommand{\KT}{\ensuremath{\textup{\textbf{KT}}}\xspace}
+\newcommand{\KD}{\ensuremath{\textup{\textbf{KD}}}\xspace}
+\newcommand{\Sfour}{\ensuremath{\textup{\textbf{S4}}}\xspace}
+\newcommand{\Sfive}{\ensuremath{\textup{\textbf{S5}}}\xspace}
+% Non-normal (classical) systems, for neighbourhood semantics:
+\newcommand{\E}{\ensuremath{\textup{\textbf{E}}}\xspace}
+\newcommand{\EM}{\ensuremath{\textup{\textbf{EM}}}\xspace}
+\newcommand{\EC}{\ensuremath{\textup{\textbf{EC}}}\xspace}
+\newcommand{\EN}{\ensuremath{\textup{\textbf{EN}}}\xspace}
+
+% --- Axioms & rules --------------------------------------------------------
+% Bold tags for axiom schemas; upright \xspace-terminated tags for rule names.
+\newcommand{\kax}{\ensuremath{\textbf{K}}\xspace}
+\newcommand{\tax}{\ensuremath{\textbf{T}}\xspace}
+\newcommand{\dax}{\ensuremath{\textbf{D}}\xspace}
+\newcommand{\nrule}{\ensuremath{\textnormal{Nec}}\xspace} % necessitation
+\newcommand{\mprule}{\ensuremath{\textnormal{MP}}\xspace}  % modus ponens
+\newcommand{\rerule}{\ensuremath{\textnormal{RE}}\xspace}  % rule of equivalents
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% EXTENDING THIS FILE — a few patterns to copy %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% The notation above is only a starting point.  Some idioms you will reach for:
+%
+% 1. A new modal operator taking a subscript argument (e.g. epistemic "K_a"):
+%       \newcommand{\knows}[1]{\mathsf{K}_{#1}}        % \knows{a} A  ->  K_a A
+%
+% 2. A blackboard-bold name you reuse a lot (e.g. a class of logics):
+%       \newcommand{\Logics}{\mathbb{L}}
+%
+% 3. A bespoke operator composed from existing glyphs — e.g. the dyadic deontic
+%    "O(.|.)".  Building operators out of smaller pieces is exactly how the
+%    parent package grew from a file like this one:
+%       \newcommand{\cought}[2]{\mathsf{O}(#1\mid #2)} % \cought{A}{B} -> O(A|B)
+%
+% Keep what earns its place; delete the rest.  That is the whole idea.
